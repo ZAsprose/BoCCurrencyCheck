@@ -1,0 +1,2 @@
+# BoCCurrencyCheck
+基于青龙面板的中国银行外汇汇率检测脚本
