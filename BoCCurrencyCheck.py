@@ -1,5 +1,7 @@
 import requests, re
 import chardet
+import csv, os
+from datetime import datetime
 from bs4 import BeautifulSoup
 #import notify
 
@@ -8,9 +10,9 @@ from bs4 import BeautifulSoup
 dic_for_coin = ['挪威克朗']
 # dictionary for currency name to print in text
 dic_for_prin_c = ['挪威元']
-dic_for_info = ['现钞卖出价']
-dic_for_prin_i = ['现钞']
-dic_for_thre = [500]
+dic_for_info = ['现钞卖出价', '现汇卖出价']
+dic_for_prin_i = ['现钞', '现汇']
+dic_for_thre = [500, 500]
 
 headertxt = '货币名称'
 dic_for_info_index = []
@@ -88,8 +90,20 @@ if r.status_code == 200:
         for i in range(len(dic_for_result)):
             for j in range(len(dic_for_result[i])):
                 print(dic_for_coin[i] + ':\n' + dic_for_info[j] + ': ' + str(dic_for_result[i][j]))
+                # generate csv file to log today's data for future use
+                # Define the data you want to write or append to the CSV file
+                file_path = dic_for_coin[i] + '_' + dic_for_info[j] + '.csv'
+                # Check if the file exists
+                file_exists = os.path.isfile(file_path)
+                # Open the file in append mode
+                with open(file_path, mode='a', newline='') as file:
+                    writer = csv.writer(file)
+                    # Write the data to the CSV file
+                    writer.writerow([datetime.now().strftime('%Y-%m-%d'), dic_for_result[i][j]])
+
+                # generate notify text
                 if dic_for_result[i][j] < dic_for_thre[j]:
-                    printres += (dic_for_prin_c[i] + '-' + dic_for_prin_i[i] + ':' + str(dic_for_result[i][j]) + '\n')
+                    printres += (dic_for_prin_c[i] + '-' + dic_for_prin_i[j] + ':' + str(dic_for_result[i][j]) + '\n')
 
     print('====================================================================================')
     print(printres)
