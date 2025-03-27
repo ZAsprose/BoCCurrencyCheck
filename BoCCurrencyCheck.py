@@ -12,7 +12,7 @@ dic_for_coin = ['挪威克朗']
 dic_for_prin_c = ['挪威元']
 dic_for_info = ['现钞卖出价', '现汇卖出价']
 dic_for_prin_i = ['现钞', '现汇']
-dic_for_thre = [500, 500]
+dic_for_thre = [[500, 500]]
 
 headertxt = '货币名称'
 dic_for_info_index = []
@@ -85,7 +85,7 @@ if r.status_code == 200:
         dic_for_result.append(res)
     print(dic_for_result)
 
-    if len(dic_for_coin) == len(dic_for_result) and len(dic_for_thre) == len(dic_for_result[0]):
+    if len(dic_for_coin) == len(dic_for_result) and len(dic_for_thre) == len(dic_for_coin) and len(dic_for_thre[0]) == len(dic_for_result[0]):
         print('valid result')
         for i in range(len(dic_for_result)):
             for j in range(len(dic_for_result[i])):
@@ -102,7 +102,7 @@ if r.status_code == 200:
                     writer.writerow([datetime.now().strftime('%Y-%m-%d'), dic_for_result[i][j]])
 
                 # generate notify text
-                if dic_for_result[i][j] < dic_for_thre[j]:
+                if dic_for_result[i][j] < dic_for_thre[i][j]:
                     printres += (dic_for_prin_c[i] + '-' + dic_for_prin_i[j] + ':' + str(dic_for_result[i][j]) + '\n')
 
     print('====================================================================================')
